@@ -14,17 +14,21 @@ func main() {
 		"http://golang.org",
 	}
 
+	c := make(chan string)
+
 	for _, url := range urls {
-		checkURL(url)
+		go checkURL(url, c)
 	}
+
+	fmt.Println(<-c)
 }
 
-func checkURL(url string) {
+func checkURL(url string, c chan string) {
 	_, err := http.Get(url)
 	if err != nil {
-		fmt.Println(url, "might be down!")
+		c <- fmt.Sprint(url, " might be down!")
 		return
 	}
 
-	fmt.Println(url, "is up!")
+	c <- fmt.Sprint(url, " is up!")
 }
