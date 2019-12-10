@@ -20,7 +20,9 @@ func main() {
 		go checkURL(url, c)
 	}
 
-	fmt.Println(<-c)
+	for i := 0; i < len(urls); i++ {
+		fmt.Println(<-c)
+	}
 }
 
 func checkURL(url string, c chan string) {
@@ -29,6 +31,5 @@ func checkURL(url string, c chan string) {
 		c <- fmt.Sprint(url, " might be down!")
 		return
 	}
-
 	c <- fmt.Sprint(url, " is up!")
 }
